@@ -1,11 +1,5 @@
-import random
-import os
-import asyncio
-from itertools import cycle
-
 import discord
-from discord.ext import commands, tasks
-
+from discord.ext import commands
 
 class MyCog(commands.Cog):
     def __init__(self, bot):
@@ -17,9 +11,9 @@ class MyCog(commands.Cog):
     
     @commands.command()
     async def ping(self, ctx):
-        #to = ctx.author
+        to = ctx.author
         bot_latency = round(self.client.latency * 1000)
-        await ctx.author.send(f"Pong you too! , my latency is {bot_latency}ms")
+        await ctx.author.send(f"Pong you too! ,{to}, my latency is {bot_latency}ms")
         
         
 
