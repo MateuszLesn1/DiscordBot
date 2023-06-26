@@ -1,7 +1,6 @@
 import random
 import os
 import asyncio
-from itertools import cycle
 
 import discord
 from discord.ext import commands, tasks
@@ -27,10 +26,4 @@ async def main():
           
 asyncio.run(main())   
  
- 
-#@bot.command(aliases=["8ball","question","8"])
-#async def magic_eightball(ctx, *, question):
-#    with open("responses.txt", "r") as file:
-#        random_responses = file.readlines()
-#        response = random.choice(random_responses)     
-#    await ctx.send(response)
+
