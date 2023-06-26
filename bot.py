@@ -2,11 +2,11 @@ import os
 import asyncio
 
 import discord
-from discord.ext import commands, tasks
+from discord.ext import commands
 
-
+intents = discord.Intents.default()
 bot = commands.Bot(command_prefix=".", intents=discord.Intents.all())
-
+intents.members = True
 
 @bot.event
 async def on_ready():   
@@ -22,7 +22,8 @@ async def main():
     async with bot:   
         await load()
         await bot.start("TOKEN")
-          
+ 
+  
 asyncio.run(main())   
  
 
