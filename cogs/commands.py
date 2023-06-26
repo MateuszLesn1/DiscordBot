@@ -3,11 +3,12 @@ from discord.ext import commands
 
 import random
 
+
+        
 class Commands(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-
-    
+             
     
     @commands.Cog.listener()
     async def on_ready(self):
@@ -25,6 +26,19 @@ class Commands(commands.Cog):
             random_responses = file.readlines()
         response = random.choice(random_responses)     
         await ctx.send(response)
+    
+    #@commands.command()
+    #async def embed(self, ctx):
+    #    embed_message = discord.Embed(title="title of embed", description="Desciption of embed", color=discord.Color.green())
+        
+    #    embed_message.set_author(name=f"Requested by {ctx.author.mention}", icon_url=ctx.author.avatar)
+    #    embed_message.set_thumbnail(url=ctx.guild.icon)
+    #    embed_message.set_image(url=ctx.guild.icon)
+    #    embed_message.add_field(name="Field name", value="Field value", inline=False)
+    #    embed_message.set_footer(text="This is a footer")   
+    #    await ctx.send(embed = embed_message)
+    
+    
         
         
 
