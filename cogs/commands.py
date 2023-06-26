@@ -61,7 +61,6 @@ class Welcome(commands.Cog) :
         else:
             print("id channel wrong")
 
-        
 
 async def setup(bot):
     await bot.add_cog(Commands(bot))
