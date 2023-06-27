@@ -60,6 +60,11 @@ class Welcome(commands.Cog) :
                 await channel.send(f'Welcome to the {guild.name} Discord Server, {member.mention} !  :partying_face:')
         else:
             print("id channel wrong")
+            
+    @commands.command()
+    async def voice(self, ctx):
+        await ctx.send(f"love you {ctx.author}", tts=True)
+       
 
 
 async def setup(bot):
