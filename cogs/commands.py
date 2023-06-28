@@ -1,5 +1,7 @@
 import discord
 from discord.ext import commands
+import subprocess
+import tempfile
 
 import random
 
@@ -24,6 +26,9 @@ class Commands(commands.Cog):
             random_responses = file.readlines()
         response = random.choice(random_responses)     
         await ctx.send(response)
+
+    
+    
     
     #@commands.command()
     #async def embed(self, ctx):
