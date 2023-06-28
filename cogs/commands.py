@@ -1,10 +1,8 @@
 import discord
 from discord.ext import commands
-import subprocess
-import tempfile
 
+import vlc
 import random
-
 
 class Commands(commands.Cog):
     def __init__(self, bot):
@@ -13,7 +11,20 @@ class Commands(commands.Cog):
     @commands.Cog.listener()
     async def on_ready(self):
         print("commands.py is ready!")
-    
+        
+    @commands.command()
+    async def voice(self, ctx):
+        await ctx.send(f"love you {ctx.author}", tts=True)
+       
+    @commands.command()
+    async def join(self, ctx):
+        channel = ctx.author.voice.channel
+        await channel.connect()
+        
+    @commands.command()
+    async def leave(self, ctx):
+        await ctx.voice_client.disconnect()
+
     @commands.command()
     async def ping(self, ctx):
         to = ctx.author
@@ -27,8 +38,14 @@ class Commands(commands.Cog):
         response = random.choice(random_responses)     
         await ctx.send(response)
 
-    
-    
+    @commands.command()
+    async def test(self, ctx): 
+        channel = ctx.author.voice.channel
+        await channel.connect()        
+        p = vlc.MediaPlayer("https://uberduck-audio-outputs.s3-us-west-2.amazonaws.com/87d557a8-886a-47d7-a02e-583d6f210f5e/audio.wav")
+        await p.play()
+        
+
     
     #@commands.command()
     #async def embed(self, ctx):
@@ -66,10 +83,6 @@ class Welcome(commands.Cog) :
         else:
             print("id channel wrong")
             
-    @commands.command()
-    async def voice(self, ctx):
-        await ctx.send(f"love you {ctx.author}", tts=True)
-       
 
 
 async def setup(bot):

@@ -21,7 +21,7 @@ async def load():
 async def main():
     async with bot:   
         await load()
-        await bot.start("discord bot token")
+        await bot.start("")
   
 asyncio.run(main())   
  
