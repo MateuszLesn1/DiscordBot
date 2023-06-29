@@ -1,11 +1,11 @@
 import requests
 from time import sleep
 
-uberduck_auth = ("") #uberudck auth
+uberduck_auth = ("pub_lzybtvvnnzrsssvstb", "pk_77ba8c6f-899e-4bd2-a2d8-a99bbc53dd75") #uberudck auth
 print(requests.get("https://api.uberduck.ai/status").json())
 
-voicemodel_uuid = "4bed3a85-946d-4e47-bd35-b3a2f51b3efa" #voice model uuid
-text = "good morning char"
+voicemodel_uuid = "de6d0d66-5501-472e-a0e0-31bfe7fe2c75" #voice model uuid
+text = "Hello i'm a test bot"
 audio_uuid = requests.post(
     "https://api.uberduck.ai/speak",
     json=dict(speech=text, voicemodel_uuid=voicemodel_uuid),
@@ -18,7 +18,7 @@ for t in range(10):
         "https://api.uberduck.ai/speak-status",
         params=dict(uuid=audio_uuid),
         auth=uberduck_auth,
-    ).json()
+        ).json()
     if "path" in output:
         audio_url = output["path"]
         print(audio_url)

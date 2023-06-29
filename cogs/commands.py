@@ -42,7 +42,7 @@ class Commands(commands.Cog):
     async def test(self, ctx): 
         channel = ctx.author.voice.channel
         await channel.connect()        
-        p = vlc.MediaPlayer("https://uberduck-audio-outputs.s3-us-west-2.amazonaws.com/87d557a8-886a-47d7-a02e-583d6f210f5e/audio.wav")
+        p = vlc.MediaPlayer("https://uberduck-audio-outputs.s3-us-west-2.amazonaws.com/3a599792-73fe-426d-8ef1-9c6f1ffc63c4/audio.wav")
         await p.play()
         
 
@@ -81,7 +81,7 @@ class Welcome(commands.Cog) :
         if channel is not None:
                 await channel.send(f'Welcome to the {guild.name} Discord Server, {member.mention} !  :partying_face:')
         else:
-            print("id channel wrong")
+            print("wrong id channel")
             
 
 
