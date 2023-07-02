@@ -11,7 +11,7 @@ intents.members = True
 @bot.event
 async def on_ready():   
     print("Bot is connected to discord")
-    await bot.change_presence(activity=discord.Game(name=".help"))
+    await bot.change_presence(activity=discord.Game(name="Chilling and stuff, type .help"))
     
 async def load():
     for filename in os.listdir("./cogs"):
@@ -21,7 +21,7 @@ async def load():
 async def main():
     async with bot:   
         await load()
-        await bot.start("")
+        await bot.start("token")
 
 asyncio.run(main())   
  
