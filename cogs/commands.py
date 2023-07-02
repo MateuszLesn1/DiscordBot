@@ -1,20 +1,16 @@
 import discord
 from discord.ext import commands
-
-import vlc
 import random
+from uberduckapi import p
+
 
 class Commands(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-             
+         
     @commands.Cog.listener()
     async def on_ready(self):
         print("commands.py is ready!")
-        
-    @commands.command()
-    async def voice(self, ctx):
-        await ctx.send(f"love you {ctx.author}", tts=True)
        
     @commands.command()
     async def join(self, ctx):
@@ -37,12 +33,13 @@ class Commands(commands.Cog):
             random_responses = file.readlines()
         response = random.choice(random_responses)     
         await ctx.send(response)
-
+    
+    
     @commands.command()
-    async def test(self, ctx): 
-        channel = ctx.author.voice.channel
-        await channel.connect()        
-        p = vlc.MediaPlayer("https://uberduck-audio-outputs.s3-us-west-2.amazonaws.com/3a599792-73fe-426d-8ef1-9c6f1ffc63c4/audio.wav")
+    async def voice(self, ctx): 
+        #channel = ctx.author.voice.channel
+        #await channel.connect()        
+        #p = vlc.MediaPlayer(audio_url)
         await p.play()
         
 
@@ -82,8 +79,7 @@ class Welcome(commands.Cog) :
                 await channel.send(f'Welcome to the {guild.name} Discord Server, {member.mention} !  :partying_face:')
         else:
             print("wrong id channel")
-            
-
+        
 
 async def setup(bot):
     await bot.add_cog(Commands(bot))
