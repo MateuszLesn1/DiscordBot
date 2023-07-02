@@ -1,7 +1,15 @@
 import discord
 from discord.ext import commands
+
+from time import sleep
+
 import random
-from uberduckapi import p
+import requests
+import vlc
+
+uberduck_auth = ("pub_lzybtvvnnzrsssvstb", "pk_77ba8c6f-899e-4bd2-a2d8-a99bbc53dd75") #uberudck auth
+print(requests.get("https://api.uberduck.ai/status").json())
+voicemodel_uuid = "30b67b62-51a8-43db-a1b4-edafd5b4cfea" #voice model uuid
 
 
 class Commands(commands.Cog):
@@ -36,14 +44,27 @@ class Commands(commands.Cog):
     
     
     @commands.command()
-    async def voice(self, ctx): 
-        #channel = ctx.author.voice.channel
-        #await channel.connect()        
-        #p = vlc.MediaPlayer(audio_url)
+    async def voice(self, ctx, *, arg="hello, how are you"):# tts message when user forgets and argument, sadly can't make it longer, API seems to not pick up voice messages longer than 2 or 3 secs   
+        text = arg
+        audio_uuid = requests.post(
+            "https://api.uberduck.ai/speak",
+        json=dict(speech=text, voicemodel_uuid=voicemodel_uuid),
+        auth=uberduck_auth,
+                            ).json()["uuid"]
+        for t in range(10):
+            sleep(1) # check status every second for 10 seconds.
+            output = requests.get(
+                "https://api.uberduck.ai/speak-status",
+                params=dict(uuid=audio_uuid),
+                auth=uberduck_auth,
+                ).json()
+            if "path" in output:
+                audio_url = output["path"]
+                print(audio_url)
+                break
+        p = vlc.MediaPlayer(audio_url)
         await p.play()
-        
-
-    
+         
     #@commands.command()
     #async def embed(self, ctx):
     #    embed_message = discord.Embed(title="title of embed", description="Desciption of embed", color=discord.Color.green())
@@ -54,8 +75,7 @@ class Commands(commands.Cog):
     #    embed_message.add_field(name="Field name", value="Field value", inline=False)
     #    embed_message.set_footer(text="This is a footer")   
     #    await ctx.send(embed = embed_message)
-    
-    
+       
 class Welcome(commands.Cog) :
     def __init__(self, bot):
         self.client=bot
