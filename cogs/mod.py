@@ -9,7 +9,6 @@ class Mod_commands(commands.Cog):
     async def on_ready(self):
         print("mod.py is ready!")
         
-
     @commands.command()
     @commands.has_permissions(manage_messages = True)
     async def clear(self, ctx, n=5):

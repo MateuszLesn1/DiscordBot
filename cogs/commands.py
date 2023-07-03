@@ -1,15 +1,15 @@
 import discord
+from discord import FFmpegPCMAudio
 from discord.ext import commands
-
 from time import sleep
 
 import random
 import requests
-import vlc
+
 
 uberduck_auth = ("pub_hokfowvgtdcouysula", "pk_b5b69421-017b-4d98-bbb6-739eba9c1753") #uberudck auth
 print(requests.get("https://api.uberduck.ai/status").json())
-voicemodel_uuid = "30b67b62-51a8-43db-a1b4-edafd5b4cfea" #voice model uuid
+voicemodel_uuid = "30b67b62-51a8-43db-a1b4-edafd5b4cfea" #voice model
 
 
 class Commands(commands.Cog):
@@ -42,7 +42,6 @@ class Commands(commands.Cog):
         response = random.choice(random_responses)     
         await ctx.send(response)
     
-    
     @commands.command()
     async def voice(self, ctx, *, text="hello, how are you"):# tts message when user forgets and argument, sadly can't make it longer, API seems to not pick up voice messages longer than 2 or 3 secs   
         audio_uuid = requests.post(
@@ -56,17 +55,17 @@ class Commands(commands.Cog):
                 params=dict(uuid=audio_uuid),
                 auth=uberduck_auth,
                                  ).json()
+            print(output)
             if "path" in output:
                 audio_url = output["path"]
                 print(audio_url)
                 break
-        p = vlc.MediaPlayer(audio_url)
-        await p.play()
-         
+        source = FFmpegPCMAudio(audio_url, executable="ffmpeg")
+        ctx.voice_client.play(source, after=None)
+
     #@commands.command()
     #async def embed(self, ctx):
     #    embed_message = discord.Embed(title="title of embed", description="Desciption of embed", color=discord.Color.green())
-        
     #    embed_message.set_author(name=f"Requested by {ctx.author.mention}", icon_url=ctx.author.avatar)
     #    embed_message.set_thumbnail(url=ctx.guild.icon)
     #    embed_message.set_image(url=ctx.guild.icon)
