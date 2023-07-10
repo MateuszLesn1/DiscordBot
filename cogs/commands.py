@@ -63,16 +63,6 @@ class Commands(commands.Cog):
         source = FFmpegPCMAudio(audio_url, executable="ffmpeg")
         ctx.voice_client.play(source, after=None)
 
-    #@commands.command()
-    #async def embed(self, ctx):
-    #    embed_message = discord.Embed(title="title of embed", description="Desciption of embed", color=discord.Color.green())
-    #    embed_message.set_author(name=f"Requested by {ctx.author.mention}", icon_url=ctx.author.avatar)
-    #    embed_message.set_thumbnail(url=ctx.guild.icon)
-    #    embed_message.set_image(url=ctx.guild.icon)
-    #    embed_message.add_field(name="Field name", value="Field value", inline=False)
-    #    embed_message.set_footer(text="This is a footer")   
-    #    await ctx.send(embed = embed_message)
-       
 class Welcome(commands.Cog) :
     def __init__(self, bot):
         self.client=bot
@@ -85,8 +75,8 @@ class Welcome(commands.Cog) :
     async def on_member_join(self, member):
         print(member)
         await member.send(f"hello {member} ! If you have any questions, hit me up! I can't answer them, but at least i'll listen in silence!")
-        guild = self.client.get_guild(764422667901861898)
-        channel = discord.utils.get(member.guild.channels, id=1122864989900918795)
+        guild = self.client.get_guild(764422667901861898) #discord id
+        channel = discord.utils.get(member.guild.channels, id=1122864989900918795) #text channel id
         if guild:
             print("guild ok")
         else:
