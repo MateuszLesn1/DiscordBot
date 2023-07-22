@@ -1,5 +1,6 @@
 import os
 import asyncio
+from config import TOKEN
 
 import discord
 from discord.ext import commands
@@ -7,6 +8,8 @@ from discord.ext import commands
 intents = discord.Intents.default()
 bot = commands.Bot(command_prefix=".", intents=discord.Intents.all())
 intents.members = True
+
+bot.remove_command("help")
 
 @bot.event
 async def on_ready():   
@@ -21,8 +24,7 @@ async def load():
 async def main():
     async with bot:   
         await load()
-        await bot.start("token")
-
+        await bot.start(TOKEN)
 asyncio.run(main())   
  
 

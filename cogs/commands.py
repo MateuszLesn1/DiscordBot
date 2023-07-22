@@ -7,7 +7,7 @@ import random
 import requests
 
 
-uberduck_auth = ("pub_hokfowvgtdcouysula", "pk_b5b69421-017b-4d98-bbb6-739eba9c1753") #uberudck auth
+uberduck_auth = ("pub_rgvxmklfixiqifcfua", "pk_908a71f4-c318-4ef5-ad8f-f2952ce8142c") #uberudck auth
 print(requests.get("https://api.uberduck.ai/status").json())
 voicemodel_uuid = "30b67b62-51a8-43db-a1b4-edafd5b4cfea" #voice model
 
@@ -18,7 +18,7 @@ class Commands(commands.Cog):
          
     @commands.Cog.listener()
     async def on_ready(self):
-        print("commands.py is ready!")
+        print("Commmands: ON ")
        
     @commands.command()
     async def join(self, ctx):
@@ -34,32 +34,31 @@ class Commands(commands.Cog):
         to = ctx.author
         bot_latency = round(self.bot.latency * 1000)
         await ctx.send(f"Pong you too {to}, my latency is {bot_latency} ms")
-        
-    @commands.command(aliases=["8ball","question","8"])
-    async def magic_eightball(self, ctx):
-        with open("responses.txt", "r") as file:
-            random_responses = file.readlines()
-        response = random.choice(random_responses)     
-        await ctx.send(response)
-    
+
     @commands.command()
     async def voice(self, ctx, *, text="hello, how are you"):# tts message when user forgets and argument, sadly can't make it longer, API seems to not pick up voice messages longer than 2 or 3 secs   
+
         audio_uuid = requests.post(
             "https://api.uberduck.ai/speak",
         json=dict(speech=text, voicemodel_uuid=voicemodel_uuid),
         auth=uberduck_auth).json()["uuid"]
-        for t in range(10):
-            sleep(1) # check status every second for 10 seconds.
+        for _ in range(10):       
             output = requests.get(
                 "https://api.uberduck.ai/speak-status",
                 params=dict(uuid=audio_uuid),
                 auth=uberduck_auth,
                                  ).json()
             print(output)
-            if "path" in output:
+               
+            if output["path"] is None:
+                print("checking status")
+                sleep(1) # check status every second for 10 seconds.  
+                                       
+            elif output["path"] != "None":
                 audio_url = output["path"]
                 print(audio_url)
                 break
+
         source = FFmpegPCMAudio(audio_url, executable="ffmpeg")
         ctx.voice_client.play(source, after=None)
 
@@ -85,9 +84,27 @@ class Welcome(commands.Cog) :
         if channel is not None:
                 await channel.send(f'Welcome to the {guild.name} Discord Server, {member.mention} !  :partying_face:')
         else:
-            print("wrong id channel")
+            print("no Welcome id channel")
+      
+class HelpCommand(commands.Cog):
+    def __init__(self, bot):
+        self.client=bot 
         
+    @commands.Cog.listener()
+    async def on_ready(self):
+        print("HelpCommand: ON")
+    
+    @commands.command()
+    async def help(self, ctx):
+        help_embed = discord.Embed(title="Help Commands", description="")
+        help_embed.set_author(name="Serindbot",icon_url=self.client.user.avatar.url)
+        help_embed.add_field(name=".join", value= "")
+        help_embed.add_field(name=".leave", value="")
+        help_embed.add_field(name=".ping", value="Pings bot to check it's ms")
+        help_embed.add_field(name=".voice", value='TTS saying what is written after the command. Says "Hello, how are you" if left empty.')
+        await ctx.send(embed= help_embed, ephemeral = True)
 
 async def setup(bot):
     await bot.add_cog(Commands(bot))
     await bot.add_cog(Welcome(bot))
+    await bot.add_cog(HelpCommand(bot))

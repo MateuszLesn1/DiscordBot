@@ -7,7 +7,7 @@ class Mod_commands(commands.Cog):
            
     @commands.Cog.listener()
     async def on_ready(self):
-        print("mod.py is ready!")
+        print("Mod: ON")
         
     @commands.command()
     @commands.has_permissions(manage_messages = True)
