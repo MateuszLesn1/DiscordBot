@@ -5,7 +5,6 @@ from discord.ext import commands
 from config import uberduck
 from time import sleep
 
-import random
 import requests
 
 
@@ -14,13 +13,14 @@ print(requests.get("https://api.uberduck.ai/status").json())
 voicemodel_uuid = "30b67b62-51a8-43db-a1b4-edafd5b4cfea" #voice model
 
 
+
 class Commands(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
          
     @commands.Cog.listener()
     async def on_ready(self):
-        print("Commmands: ON ")
+        print("Commmands: ON")
        
     @commands.command()
     async def join(self, ctx):
@@ -39,7 +39,6 @@ class Commands(commands.Cog):
 
     @commands.command()
     async def voice(self, ctx, *, text="hello, how are you"):# tts message when user forgets and argument, sadly can't make it longer, API seems to not pick up voice messages longer than 2 or 3 secs   
-
         audio_uuid = requests.post(
             "https://api.uberduck.ai/speak",
         json=dict(speech=text, voicemodel_uuid=voicemodel_uuid),
@@ -56,7 +55,7 @@ class Commands(commands.Cog):
                 print("checking status")
                 sleep(1) # check status every second for 10 seconds.  
                                        
-            elif output["path"] != "None":
+            elif output["path"] != None :
                 audio_url = output["path"]
                 print(audio_url)
                 break
@@ -95,7 +94,7 @@ class HelpCommand(commands.Cog):
     @commands.Cog.listener()
     async def on_ready(self):
         print("HelpCommand: ON")
-    
+ 
     @commands.command()
     async def help(self, ctx):
         help_embed = discord.Embed(title="Help Commands", description="")
@@ -105,6 +104,7 @@ class HelpCommand(commands.Cog):
         help_embed.add_field(name=".ping", value="Pings bot to check it's ms")
         help_embed.add_field(name=".voice", value='TTS saying what is written after the command. Says "Hello, how are you" if left empty.')
         await ctx.send(embed= help_embed, ephemeral = True)
+    
 
 async def setup(bot):
     await bot.add_cog(Commands(bot))
