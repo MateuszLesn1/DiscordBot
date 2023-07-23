@@ -1,13 +1,15 @@
 import discord
 from discord import FFmpegPCMAudio
 from discord.ext import commands
+
+from config import uberduck
 from time import sleep
 
 import random
 import requests
 
 
-uberduck_auth = ("pub_rgvxmklfixiqifcfua", "pk_908a71f4-c318-4ef5-ad8f-f2952ce8142c") #uberudck auth
+uberduck_auth = uberduck  #uberudck auth
 print(requests.get("https://api.uberduck.ai/status").json())
 voicemodel_uuid = "30b67b62-51a8-43db-a1b4-edafd5b4cfea" #voice model
 
