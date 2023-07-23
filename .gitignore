@@ -2,7 +2,4 @@ config.py
 cogs/__pycache__/
 __pycache__
 
-cogs/__pycache__/commands.cpython-310.pyc
-cogs/__pycache__/mod.cpython-310.pyc
-cogs/commands.py
 
