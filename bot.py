@@ -21,7 +21,7 @@ async def on_ready():
 @bot.event
 async def on_raw_reaction_add(reaction):
     emoji = reaction.emoji.name
-    if reaction.message_id == 1132628800010719303: 
+    if reaction.message_id == 1132628800010719303: # ID of message, to which reacting, will assign roles based on rules below 
         if emoji =="👋":
             get_role = get(reaction.member.guild.roles, name="Hey")
             await reaction.member.add_roles(get_role)
