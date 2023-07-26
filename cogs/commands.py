@@ -7,12 +7,9 @@ from time import sleep
 
 import requests
 
-
 uberduck_auth = uberduck  #uberudck auth
 print(requests.get("https://api.uberduck.ai/status").json())
 voicemodel_uuid = "30b67b62-51a8-43db-a1b4-edafd5b4cfea" #voice model
-
-
 
 class Commands(commands.Cog):
     def __init__(self, bot):
@@ -38,7 +35,7 @@ class Commands(commands.Cog):
         await ctx.send(f"Pong you too {to}, my latency is {bot_latency} ms")
 
     @commands.command()
-    async def voice(self, ctx, *, text="hello, how are you"):# tts message when user forgets and argument, sadly can't make it longer, API seems to not pick up voice messages longer than 2 or 3 secs   
+    async def voice(self, ctx, *, text="hello, how are you"):# tts message when user forgets an argument, sadly can't make it longer, API seems to not pick up voice messages longer than 2 or 3 secs   
         audio_uuid = requests.post(
             "https://api.uberduck.ai/speak",
         json=dict(speech=text, voicemodel_uuid=voicemodel_uuid),
@@ -75,7 +72,7 @@ class Welcome(commands.Cog) :
     async def on_member_join(self, member):
         print(member)
         await member.send(f"hello {member} ! If you have any questions, hit me up! I can't answer them, but at least i'll listen in silence!")
-        guild = self.client.get_guild(764422667901861898) #discord id
+        guild = self.client.get_guild(764422667901861898) #discord server id
         channel = discord.utils.get(member.guild.channels, id=1122864989900918795) #text channel id
         if guild:
             print("guild ok")
