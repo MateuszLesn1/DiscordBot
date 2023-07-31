@@ -1,1 +1,1 @@
-Discord bot with basic functions and tts using uberduck api.
+Music discord bot with basic functions and tts using uberduck api.
