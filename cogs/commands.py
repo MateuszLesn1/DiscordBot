@@ -1,13 +1,11 @@
 import discord
 from discord import FFmpegPCMAudio
 from discord.ext import commands
-from time import sleep
 import requests
-import yt_dlp
 import asyncio
 
 from config import uberduck
-from .musicplayer import MusicPlayer
+
 
 
 uberduck_auth = uberduck  
@@ -19,7 +17,6 @@ class Commands(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
    
-   
     @commands.Cog.listener()
     async def on_ready(self):
         print("Commmands: ON")
@@ -27,7 +24,7 @@ class Commands(commands.Cog):
     @commands.command()
     async def join(self, ctx):
         channel = ctx.author.voice.channel
-        await channel.connect()
+        await channel.connect(timeout=None)
         
     @commands.command()
     async def leave(self, ctx):
@@ -51,7 +48,6 @@ class Commands(commands.Cog):
                 await asyncio.sleep(1)  # Non-blocking sleep using asyncio
             else:
                 return output["path"]
-
         return None  # Return None if the audio URL is not available after 10 checks
     
     
@@ -69,53 +65,25 @@ class Commands(commands.Cog):
             else:
                 # works better than the ctx.voice_client.move_to function
                 await ctx.voice_client.disconnect()
-                await channel.connect()
+                await channel.connect(timeout=None)
         # the bot is not connected to any voice channel so connect to the author's voice channel                          
         else: 
-            await channel.connect()
+            await channel.connect(timeout=None)
             
         audio_uuid = requests.post(
             "https://api.uberduck.ai/speak",
             json=dict(speech=text, voicemodel_uuid=voicemodel_uuid),
             auth=uberduck_auth
         ).json()["uuid"]
-        
-        audio_url = await self.wait_for_audio_url(audio_uuid)
-        
+      
+        audio_url = await self.wait_for_audio_url(audio_uuid)       
         print(audio_url)
-        
+              
         if not audio_url:
             await ctx.send("Failed to generate TTS audio.")
             return
-
         source = FFmpegPCMAudio(audio_url, executable="ffmpeg")
         ctx.voice_client.play(source, after=None)
-
-    @commands.command()
-    async def play(self, ctx, *, song_url):
-        channel = ctx.author.voice.channel
-        if not channel:
-            await ctx.send("You need to be in a voice channel to use this command.")
-            return 
-        # check if the bot is already connected to any voice channel        
-        if ctx.voice_client:
-            # check if the bot is already in the same voice channel as the author
-            if ctx.voice_client.channel == channel:                
-                pass # the bot is already in the same voice channel do nothing
-            else:
-                # works better than the ctx.voice_client.move_to function
-                await ctx.voice_client.disconnect()
-                await channel.connect()
-        # the bot is not connected to any voice channel so connect to the author's voice channel                          
-        else: 
-            await channel.connect()
-     
-        ydl_opts = {'format': 'bestaudio'}  # use yt_dlp to fetch the URL of the song from YouTube
-        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-            info = ydl.extract_info(f"ytsearch:{song_url}", download=False)
-            url = info['entries'][0]['url']
- 
-        ctx.voice_client.play(discord.FFmpegPCMAudio(url)) # play the song in the voice channel
 
 class HelpCommand(commands.Cog):
     def __init__(self, bot):
@@ -135,7 +103,6 @@ class HelpCommand(commands.Cog):
         help_embed.add_field(name=".voice", value='TTS saying what is written after the command. Says "Hello, how are you" if left empty.')
         await ctx.send(embed= help_embed, ephemeral=True)
     
-
 async def setup(bot):
     await bot.add_cog(Commands(bot))
     await bot.add_cog(HelpCommand(bot))
