@@ -45,30 +45,26 @@ class Commands(commands.Cog):
             ).json()
             if output["path"] is None:       
                 print("checking status")
-                await asyncio.sleep(1)  # Non-blocking sleep using asyncio
+                await asyncio.sleep(1)                  # Non-blocking sleep using asyncio
             else:
                 return output["path"]
-        return None  # Return None if the audio URL is not available after 10 checks
+        return None                                     # Return None if the audio URL is not available after 10 checks
     
     
     @commands.command()
     async def voice(self, ctx, *, text="hello, how are you"):
-        channel = ctx.author.voice.channel
+        channel = ctx.author.voice.channel              # save author's current voice channel as a variable
         if not channel:
             await ctx.send("You need to be in a voice channel to use this command.")
-            return 
-        # check if the bot is already connected to any voice channel        
-        if ctx.voice_client:
-            # check if the bot is already in the same voice channel as the author
-            if ctx.voice_client.channel == channel:                
-                pass # the bot is already in the same voice channel do nothing
-            else:
-                # works better than the ctx.voice_client.move_to function
+            return
+        if ctx.voice_client:                            # check if the bot is already connected to any voice channel    
+            if ctx.voice_client.channel == channel:     # check if the bot is already in the same voice channel as the author               
+                pass                                    # the bot is already in the same voice channel do nothing
+            else:                                       # works better than the ctx.voice_client.move_to function             
                 await ctx.voice_client.disconnect()
-                await channel.connect(timeout=None)
-        # the bot is not connected to any voice channel so connect to the author's voice channel                          
-        else: 
-            await channel.connect(timeout=None)
+                await channel.connect(timeout=None)                           
+        else:                                           # the bot is not connected to any voice channel so connect to the author's voice channel  
+            await channel.connect(timeout=None)    
             
         audio_uuid = requests.post(
             "https://api.uberduck.ai/speak",

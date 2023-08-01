@@ -8,7 +8,7 @@ class MusicPlayer(commands.Cog):
     def __init__(self, voice_client):
         self.voice_client = voice_client
         self.queue = []    
-        self.ydl_opts = {'format': 'bestaudio'}  # use yt_dlp to fetch the URL of the song from YouTube
+        self.ydl_opts = {'format': 'bestaudio'}         # use yt_dlp to fetch the URL of the song from YouTube
         self.MPEG_OPTIONS = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5', 'options': '-vn'}
         
              
@@ -18,35 +18,27 @@ class MusicPlayer(commands.Cog):
      
     @commands.command(aliases=["p","pl"])
     async def play(self, ctx, *, song_url):
-        channel = ctx.author.voice.channel
+        channel = ctx.author.voice.channel              # save author's current voice channel as a variable
         if not channel:
             await ctx.send("You need to be in a voice channel to use this command.")
             return
-        # check if the bot is already connected to any voice channel        
-        if ctx.voice_client:
-            # check if the bot is already in the same voice channel as the author
-            if ctx.voice_client.channel == channel:                
-                pass # the bot is already in the same voice channel do nothing
-            else:
-                # works better than the ctx.voice_client.move_to function
+        if ctx.voice_client:                            # check if the bot is already connected to any voice channel    
+            if ctx.voice_client.channel == channel:     # check if the bot is already in the same voice channel as the author               
+                pass                                    # the bot is already in the same voice channel do nothing
+            else:                                       # works better than the ctx.voice_client.move_to function             
                 await ctx.voice_client.disconnect()
-                await channel.connect(timeout=None)
-        # the bot is not connected to any voice channel so connect to the author's voice channel                          
-        else: 
-            await channel.connect(timeout=None)
-        
-        self.add_to_queue(song_url)
-        
-        # check if the bot is not currently playing anything and there are songs in the queue       
+                await channel.connect(timeout=None)                           
+        else:                                           # the bot is not connected to any voice channel so connect to the author's voice channel  
+            await channel.connect(timeout=None)    
+                                                        # check if the bot is not currently playing anything and there are songs in the queue       
         if not ctx.voice_client.is_playing() and self.queue:
-            await self.play_next() # start playing the next song in the queue
-
+            await self.play_next()                 
         with yt_dlp.YoutubeDL(self.ydl_opts) as ydl:
             info = ydl.extract_info(f"ytsearch:{song_url}", download=False)
             url = info['entries'][0]['url']
             
         source = discord.FFmpegPCMAudio(url, **self.MPEG_OPTIONS)
-        ctx.voice_client.play(source) # play the song from the bot in the voice channel
+        ctx.voice_client.play(source)          
         
     '''       
     @commands.command()
@@ -62,10 +54,10 @@ class MusicPlayer(commands.Cog):
         if self.queue:
             if ctx.voice_client.is_playing():
                 ctx.voice_client.stop()
-
+          
             song_url = self.queue.pop(0)
-            ("songurl",song_url)
-       
+            ("songurl",song_url) 
+                
             with yt_dlp.YoutubeDL(self.ydl_opts) as ydl:
                 info = ydl.extract_info(f"ytsearch:{song_url}", download=False)
                 url = info['entries'][0]['url']
@@ -76,7 +68,7 @@ class MusicPlayer(commands.Cog):
         else:
             print("Queue is empty.")
             
-    @commands.command(aliases=["add"])
+    @commands.command(aliases=["add", "q"])
     async def add_to_queue(self, ctx, song_url):
         self.queue.append(song_url)
         await ctx.send(f"Added to queue: {song_url}")
