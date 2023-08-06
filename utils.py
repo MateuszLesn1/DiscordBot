@@ -2,9 +2,7 @@ import discord
 
 
 async def user_in_voice(ctx):
-    print("1")
     if not ctx.author.voice:    # Check if the user is in a voice channel
-        print("2")
         await ctx.send("You need to be in a voice channel to use this command.")
         return
     channel = ctx.author.voice.channel
