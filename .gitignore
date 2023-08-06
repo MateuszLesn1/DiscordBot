@@ -1,6 +1,5 @@
 config.py
 cogs/__pycache__/
 __pycache__
-
-
 inf.py
+test.py

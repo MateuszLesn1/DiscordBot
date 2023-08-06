@@ -7,11 +7,11 @@ import discord
 from discord.ext import commands
 from discord.utils import get
 
+
 intents = discord.Intents.default()
 bot = commands.Bot(command_prefix=".", intents=discord.Intents.all())
 intents.members = True
 
-bot.remove_command("help")
 
 @bot.event
 async def on_ready():   
