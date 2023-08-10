@@ -24,6 +24,4 @@ async def extract_yt_info(song_url):
         info = ydl.extract_info(f"ytsearch:{song_url}", download=False)
         url = info['entries'][0]['url']
         link = info['entries'][0]['webpage_url']
-        print(url)
-        print(link)
         return url, link

@@ -52,7 +52,7 @@ class MusicPlayer(commands.Cog):
             source = FFmpegPCMAudio(url,**self.MPEG_OPTIONS)
             ctx.voice_client.play(source, after=lambda _: self.play_next)
             self.current_song = link  
-            print(f"Playing next song: {link}")        
+            await self.now_playing(ctx)
         else:
             await ctx.send("No songs in queue")
             print("Queue is empty.")
