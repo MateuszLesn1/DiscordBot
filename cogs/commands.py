@@ -73,7 +73,7 @@ class Commands(commands.Cog):
         ctx.voice_client.play(source, after=None)
         execution_time2 = time.time() - start_time
         print(execution_time2)
-        
+    """       
 class HelpCommand(commands.Cog):
     def __init__(self, bot):
             self.client=bot 
@@ -81,9 +81,8 @@ class HelpCommand(commands.Cog):
     @commands.Cog.listener()
     async def on_ready(self):
         print("HelpCommand: ON")
-
-
+    """
 async def setup(bot):
     await bot.add_cog(Commands(bot))
-    await bot.add_cog(HelpCommand(bot))
+    #await bot.add_cog(HelpCommand(bot))
     

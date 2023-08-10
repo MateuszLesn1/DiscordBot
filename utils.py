@@ -1,4 +1,7 @@
 import discord
+from yt_dlp import YoutubeDL
+
+ydl_opts = {'format': 'bestaudio'} 
 
 
 async def user_in_voice(ctx):
@@ -14,3 +17,13 @@ async def user_in_voice(ctx):
             await channel.connect(timeout=None)                           
     else:                                                       # the bot is not connected to any voice channel so connect to the author's voice channel  
         await channel.connect(timeout=None)      
+
+
+async def extract_yt_info(song_url):
+    with YoutubeDL(ydl_opts) as ydl:
+        info = ydl.extract_info(f"ytsearch:{song_url}", download=False)
+        url = info['entries'][0]['url']
+        link = info['entries'][0]['webpage_url']
+        print(url)
+        print(link)
+        return url, link
