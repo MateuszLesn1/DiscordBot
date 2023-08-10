@@ -1,5 +1,6 @@
 import discord
 from yt_dlp import YoutubeDL
+import re
 
 ydl_opts = {'format': 'bestaudio'} 
 
@@ -21,7 +22,13 @@ async def user_in_voice(ctx):
 
 async def extract_yt_info(song_url):
     with YoutubeDL(ydl_opts) as ydl:
+        '''
+        Currently can just play 1st song in a playlist, will add full playlist functionality soon
+        '''
+        if matches := re.search(r"^(.+)(?:&list=.+)", song_url,re.IGNORECASE): 
+            song_url = matches.group(1)      
         info = ydl.extract_info(f"ytsearch:{song_url}", download=False)
         url = info['entries'][0]['url']
         link = info['entries'][0]['webpage_url']
         return url, link
+
