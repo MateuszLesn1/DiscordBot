@@ -26,7 +26,8 @@ async def extract_yt_info(song_url):
         Currently can just play 1st song in a playlist, will add full playlist functionality soon
         '''
         if matches := re.search(r"^(.+)(?:&list=.+)", song_url,re.IGNORECASE): 
-            song_url = matches.group(1)      
+            song_url = matches.group(1)
+                  
         info = ydl.extract_info(f"ytsearch:{song_url}", download=False)
         url = info['entries'][0]['url']
         link = info['entries'][0]['webpage_url']
