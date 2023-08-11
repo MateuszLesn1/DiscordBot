@@ -62,14 +62,15 @@ class MusicPlayer(commands.Cog):
     async def clear_queue(self, ctx):
         self.queue.clear()
         await ctx.send("Queue cleared.")
-
+        """
     @commands.command(aliases=["q","sq"])
     async def show_queue(self, ctx):
         await ctx.send(self.queue)
-        
+       """ 
     async def add_to_queue(self, ctx, song_url):
         self.queue.append(song_url)
         await ctx.send(f"Added to queue: {song_url}")
+        
     
         
                         
