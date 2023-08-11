@@ -20,7 +20,6 @@ class MusicPlayer(commands.Cog):
     @commands.command(aliases=["p","pl"])
     async def play(self, ctx, *, song_url):
         await user_in_voice(ctx)
-        #song_url check if link pass else try to convert to link and pass link
         #make it work with playlists
         
         if not ctx.voice_client.is_playing() and self.queue:
@@ -57,22 +56,25 @@ class MusicPlayer(commands.Cog):
             await ctx.send("No songs in queue")
             print("Queue is empty.")
             
-
+            
     @commands.command()
     async def clear_queue(self, ctx):
         self.queue.clear()
         await ctx.send("Queue cleared.")
-        """
+        
     @commands.command(aliases=["q","sq"])
     async def show_queue(self, ctx):
-        await ctx.send(self.queue)
-       """ 
+        queue_list = "\n".join(self.queue)  # convert the queue list into a string with each song on a new line
+        if queue_list:
+            message = f"Here is the current queue:\n{queue_list}"
+        else:
+            message = "The queue is currently empty."
+        await ctx.author.send(message)  # send the message as a direct message to the author
+       
     async def add_to_queue(self, ctx, song_url):
-        self.queue.append(song_url)
-        await ctx.send(f"Added to queue: {song_url}")
-        
-    
-        
+        url, link = await extract_yt_info(song_url)
+        self.queue.append(link)
+            
                         
 async def setup(bot):
     await bot.add_cog(MusicPlayer(bot))
