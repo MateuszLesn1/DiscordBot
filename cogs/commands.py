@@ -46,14 +46,14 @@ class Commands(commands.Cog):
             "https://api.uberduck.ai/speak",
             json=dict(speech=text, voicemodel_uuid=voicemodel_uuid),
             auth=uberduck_auth
-        ).json()["uuid"]
+            ).json()["uuid"]
 
         for _ in range(10):
             output = requests.get(
                 "https://api.uberduck.ai/speak-status",
                 params=dict(uuid=audio_uuid),
                 auth=uberduck_auth
-            ).json()
+                ).json()
             if output["path"] is None:
                 print("checking status")
                 await asyncio.sleep(1)

@@ -9,7 +9,7 @@ class MusicPlayer(commands.Cog):
         self.voice_client = voice_client
         self.queue = []
         self.current_song = None
-        self.MPEG_OPTIONS = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5', 'options': '-vn -af "volume=0.25"'}
+        self.MPEG_OPTIONS = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5', 'options': '-vn -af "volume=0.5"'}
         
         
     @commands.Cog.listener()
@@ -46,8 +46,7 @@ class MusicPlayer(commands.Cog):
                 ctx.voice_client.stop()
             song_url = self.queue.pop(0)
                     
-            url, link = await extract_yt_info(song_url)
-                
+            url, link = await extract_yt_info(song_url) 
             source = FFmpegPCMAudio(url,**self.MPEG_OPTIONS)
             ctx.voice_client.play(source, after=lambda _: asyncio.run(self.play_next(ctx)))
             self.current_song = link  
