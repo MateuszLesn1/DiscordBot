@@ -52,7 +52,7 @@ class MusicPlayer(commands.Cog):
             self.current_song = link  
             await self.now_playing(ctx)
         else:
-            await ctx.send("No songs in queue")
+            await ctx.send("No songs in queue.")
             print("Queue is empty.")
             
             

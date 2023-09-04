@@ -55,10 +55,11 @@ class Commands(commands.Cog):
                 auth=uberduck_auth
                 ).json()
             if output["path"] is None:
-                print("checking status")
+                print("checking status.")
                 await asyncio.sleep(1)
             else:
                 audio_url = output["path"]
+                print("worked!")
                 break
         else:
             audio_url = None

@@ -17,8 +17,7 @@ def init_data(database_name):
 def fetch_and_store_data(api_url, database_name):
     try:
         response = requests.get(api_url)
-        response.raise_for_status()  # Raise an exception for non-200 status codes
-        
+        response.raise_for_status()  # Raise an exception for non-200 status codes      
         data = response.json()
 
         conn = sqlite3.connect(database_name)
@@ -34,16 +33,17 @@ def fetch_and_store_data(api_url, database_name):
         conn.close()
 
         logging.info("Data successfully fetched and stored.")
+        print("")
     except Exception as e:
         logging.error(f"An error occurred: {e}")
-        raise  # Reraise the exception for further handling
+        raise  
     
 def read_data(database_name):
     try:
         conn = sqlite3.connect(database_name)
         cursor = conn.cursor()
-        select_data_sql = "SELECT * FROM voices;"
-        cursor.execute(select_data_sql)
+        select_all_data = "SELECT * FROM voices;"
+        cursor.execute(select_all_data)
         data = cursor.fetchall()
         for row in data:
             print("UUID:", row[0])
@@ -57,6 +57,7 @@ def read_data(database_name):
             
         
 if __name__ == "__main__":
+    
     logging.basicConfig(level=logging.INFO)
     database_name = 'voices.db'
     api_url = "https://api.uberduck.ai/voices?mode=tts-basic"
