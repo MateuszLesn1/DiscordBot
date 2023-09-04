@@ -2,21 +2,6 @@ import requests
 import sqlite3
 import logging 
 
-url = "https://api.uberduck.ai/voices?mode=tts-basic"
-headers = {"accept": "application/json"}
-response = requests.get(url, headers=headers).json()
-
-conn = sqlite3.connect('voices.db')
-cursor = conn.cursor()
-create_table_sql = '''
-CREATE TABLE IF NOT EXISTS voices (
-    uuid INTEGER UNIQUE,
-    name TEXT
-);
-'''
-cursor.execute(create_table_sql)
-conn.commit()
-conn.close()
 
 def init_data(database_name):
     conn = sqlite3.connect(database_name)
@@ -31,7 +16,7 @@ def init_data(database_name):
     
 def fetch_and_store_data(api_url, database_name):
     try:
-        response = requests.get(api_url, headers={"accept": "application/json"})
+        response = requests.get(api_url)
         response.raise_for_status()  # Raise an exception for non-200 status codes
         
         data = response.json()
@@ -73,7 +58,6 @@ def read_data(database_name):
         
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
-    
     database_name = 'voices.db'
     api_url = "https://api.uberduck.ai/voices?mode=tts-basic"
 
