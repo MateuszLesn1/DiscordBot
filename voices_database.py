@@ -3,6 +3,7 @@ import sqlite3
 import logging 
 
 
+
 def init_data(database_name):
     conn = sqlite3.connect(database_name)
     conn.execute("""
@@ -31,7 +32,7 @@ def fetch_and_store_data(api_url, database_name):
 
         conn.commit()
         conn.close()
-
+ 
         logging.info("Data successfully fetched and stored.")
         print("")
     except Exception as e:
@@ -42,20 +43,42 @@ def read_data(database_name):
     try:
         conn = sqlite3.connect(database_name)
         cursor = conn.cursor()
+        
         select_all_data = "SELECT * FROM voices;"
         cursor.execute(select_all_data)
+        
         data = cursor.fetchall()
+        name_list = [] 
         for row in data:
-            print("UUID:", row[0])
-            print("Name:", row[1])
-            print("")
-
+            name = row[1]  
+            name_list.append(name)
+        name_message = '\n'.join(name_list)
+        return name_message
+        
+            
     except Exception as e:
         print(f"An error occurred: {e}")
     finally:
         conn.close()
-            
         
+def read_all_data(database_name):
+    try:
+        conn = sqlite3.connect(database_name)
+        cursor = conn.cursor()
+        
+        select_all_data = "SELECT * FROM voices;"
+        cursor.execute(select_all_data)
+        
+        data = cursor.fetchall()
+        for row in data:
+            print("UUID:", row[0])
+            print("Name:", row[1])
+                     
+    except Exception as e:
+        print(f"An error occurred: {e}")
+    finally:
+        conn.close()
+                  
 if __name__ == "__main__":
     
     logging.basicConfig(level=logging.INFO)
@@ -64,6 +87,5 @@ if __name__ == "__main__":
 
     init_data(database_name)
     fetch_and_store_data(api_url, database_name)
-    read_data(database_name)
-    
+    read_all_data(database_name)
     
