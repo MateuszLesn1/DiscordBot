@@ -4,11 +4,9 @@ from discord.ext import commands
 import requests
 import asyncio
 import time
-import sqlite3
 
 from config import uberduck
-from utils import user_in_voice
-from voices_database import read_data
+from utils import user_in_voice, get_names, get_uuid_from_name
 
 
 database_name = 'voices.db'
@@ -66,12 +64,23 @@ class Tts(commands.Cog):
         execution_time2 = time.time() - start_time
         print(execution_time2)
 
-    @commands.command(aliases=["vl"])
+    @commands.command(aliases=["vl","voicelist"])
     async def voice_list(self, ctx):
-        message = read_data(database_name)
-        await ctx.author.send("Hey! Here is the list.")
-        await ctx.author.send(message)
-        await ctx.author.send("Type .vc name to change the voice.")
+        message = get_names(database_name)
+        await ctx.author.send(f"Here is the list :\n\n{message}\n\nType .vc name to change the voice.")
+    
+    @commands.command(aliases=["vc","cv","voicechange","changevoice"])
+    async def voice_change(self, ctx, name="empty_line"):
+        uuid = get_uuid_from_name(database_name, name)
+        if name == "empty_line":
+            await ctx.author.send("You forgot the name!")
+            return
+        if uuid:
+            self.voicemodel_uuid = uuid
+            await ctx.author.send(f"Voice changed to {name}")
+        else:
+            await ctx.author.send(f"Voice with name {name} not found")
+        
 
 async def setup(bot):
     await bot.add_cog(Tts(bot))
