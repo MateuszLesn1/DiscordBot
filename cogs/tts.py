@@ -14,7 +14,6 @@ uberduck_auth = uberduck
 print(requests.get("https://api.uberduck.ai/status").json())
 
 
-
 class Tts(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -68,6 +67,7 @@ class Tts(commands.Cog):
     async def voice_list(self, ctx):
         message = get_names(database_name)
         await ctx.author.send(f"Here is the list :\n\n{message}\n\nType .vc name to change the voice.")
+    
     
     @commands.command(aliases=["vc","cv","voicechange","changevoice"])
     async def voice_change(self, ctx, name="empty_line"):

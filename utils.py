@@ -86,12 +86,12 @@ def get_names(database_name):
         cursor.execute("SELECT * FROM voices;")
         
         data = cursor.fetchall()
-        name_list = [] 
+        names_list = [] 
         for row in data:
             name = row[1]  
-            name_list.append(name)
-        name_message = '\n'.join(name_list)
-        return name_message
+            names_list.append(name)
+        names_message = '\n'.join(names_list)
+        return names_message
                      
     except Exception as e:
         print(f"An error occurred: {e}")
