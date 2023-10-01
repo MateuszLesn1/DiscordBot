@@ -12,7 +12,9 @@ from utils import user_in_voice, get_names, get_uuid_from_name
 database_name = 'voices.db'
 uberduck_auth = uberduck  
 print(requests.get("https://api.uberduck.ai/status").json())
-
+"""
+ToDo: Remember last voice change
+"""
 
 class Tts(commands.Cog):
     def __init__(self, bot):

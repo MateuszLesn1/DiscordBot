@@ -3,7 +3,10 @@ from discord.ext import commands
 from discord import FFmpegPCMAudio
 import asyncio
 from utils import user_in_voice, extract_yt_info
-
+"""
+ToDo: Playlist funcionality 
+Remember last songs played and combine that into a playlist
+"""
 class MusicPlayer(commands.Cog):
     def __init__(self, voice_client):
         self.voice_client = voice_client

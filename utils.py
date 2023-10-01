@@ -123,6 +123,7 @@ def get_uuid_from_name(database_name, name):
         if name:
             cursor.execute("SELECT uuid from voices where name=?", (name,))
             data = cursor.fetchone()
+            print(data)
             if data:
                 return data[0]
             else:
