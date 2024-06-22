@@ -23,16 +23,14 @@ class MusicPlayer(commands.Cog):
     @commands.command(aliases=["p","pl"])
     async def play(self, ctx, *, song_url):
         await user_in_voice(ctx)
-        #make it work with playlists
-        
         if not ctx.voice_client.is_playing() and self.queue:
             await self.play_next(ctx)
         elif ctx.voice_client.is_playing():
-            await self.add_to_queue(ctx, song_url)
+            await self.add_to_queue(song_url)
         else:
             url, link = await extract_yt_info(song_url)
             source = FFmpegPCMAudio(url, **self.MPEG_OPTIONS)
-            ctx.voice_client.play(source, after=lambda _: asyncio.run(self.play_next(ctx)))
+            ctx.voice_client.play(source=source, after=lambda _: asyncio.run(self.play_next(ctx)))
             self.current_song = link
             
     @commands.command(aliases=["np"])
@@ -47,11 +45,11 @@ class MusicPlayer(commands.Cog):
         if self.queue:
             if ctx.voice_client.is_playing():
                 ctx.voice_client.stop()
-            song_url = self.queue.pop(0)
-                    
+                asyncio.run_coroutine_threadsafe(ctx.voice_client.loop)
+            song_url = self.queue.pop(0)        
             url, link = await extract_yt_info(song_url) 
             source = FFmpegPCMAudio(url,**self.MPEG_OPTIONS)
-            ctx.voice_client.play(source, after=lambda _: asyncio.run(self.play_next(ctx)))
+            ctx.voice_client.play(source=source, after=lambda _: asyncio.run(self.play_next(ctx)))
             self.current_song = link  
             await self.now_playing(ctx)
         else:
@@ -72,9 +70,10 @@ class MusicPlayer(commands.Cog):
         else:
             message = "The queue is currently empty."
         await ctx.author.send(message)  # send the message as a direct message to the author
-       
-    async def add_to_queue(self, ctx, song_url):
-        url, link = await extract_yt_info(song_url)
+        await ctx.send(message)
+        
+    async def add_to_queue(self, song_url):
+        _ , link = await extract_yt_info(song_url)
         self.queue.append(link)
             
                         
