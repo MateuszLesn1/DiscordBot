@@ -17,6 +17,8 @@ intents.members = True
 async def on_ready():   
     print("Bot is connected to discord")
     await bot.change_presence(activity=discord.Game(name="Chilling and stuff, type .help"))
+    
+#Just testing this not yet filly implemented
 
 @bot.event
 async def on_raw_reaction_add(reaction):
